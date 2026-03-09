@@ -14,12 +14,16 @@
 		"step": "installTheme",
 		"themeZipFile": {
 		  "resource": "url",
-		  "url": "https://github.com/tcmulder/wp-preview/raw/refs/heads/master/themes/gute.zip"
+		  "url": "https://your-site.com/your-theme.zip"
 		}
 	  },
 	  {
 		"step": "activateTheme",
-		"themeFolderName": "gute"
+		"themeFolderName": "your-theme-folder-name"
+	  },
+	  {
+		"step": "runPHP",
+		"code": "<?php require '/wordpress/wp-load.php'; update_user_meta( 1, 'gutenbergWelcomeGuide', false ); update_user_meta( 1, 'core_block_editor_is_new_user', false ); ?>"
 	  }
 	]
   }
