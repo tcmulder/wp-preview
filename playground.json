@@ -1,0 +1,25 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"login": true,
+	"landingPage": "/wp-admin/post.php?post=2&action=edit",
+	"preferredVersions": {
+	  "php": "8.3",
+	  "wp": "latest"
+	},
+	"features": {
+	  "networking": true
+	},
+	"steps": [
+	  {
+		"step": "installTheme",
+		"themeZipFile": {
+		  "resource": "url",
+		  "url": "https://github.com/tcmulder/wp-preview/raw/refs/heads/master/themes/gute.zip"
+		}
+	  },
+	  {
+		"step": "activateTheme",
+		"themeFolderName": "gute"
+	  }
+	]
+  }
