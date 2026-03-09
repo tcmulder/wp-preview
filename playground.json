@@ -3,27 +3,32 @@
 	"login": true,
 	"landingPage": "/wp-admin/post.php?post=2&action=edit",
 	"preferredVersions": {
-	  "php": "8.3",
-	  "wp": "latest"
+		"php": "8.3",
+		"wp": "latest"
 	},
 	"features": {
-	  "networking": true
+		"networking": true
 	},
 	"steps": [
-	  {
-		"step": "installTheme",
-		"themeZipFile": {
-		  "resource": "url",
-		  "url": "https://your-site.com/your-theme.zip"
+		{
+			"step": "writeFile",
+			"path": "/wordpress/wp-content/mu-plugins/gutenberg-demo-lockdown.php",
+			"data": "<?php\n/**\n * Plugin Name: Gutenberg Demo Lockdown\n * Description: Hides irrelevant admin menus and restricts navigation for the block editor demo.\n */\n\n// Remove all top-level admin menu items except Pages\nadd_action( 'admin_menu', function() {\n    global $menu;\n    $keep = [ 'edit.php?post_type=page' ];\n    foreach ( $menu as $key => $item ) {\n        if ( ! empty( $item[2] ) && ! in_array( $item[2], $keep, true ) ) {\n            remove_menu_page( $item[2] );\n        }\n    }\n    global $submenu;\n    $submenu = [];\n}, 999 );\n\n// Hide the admin toolbar on the front-end\nadd_filter( 'show_admin_bar', '__return_false' );\n\n// Redirect any wp-admin page that isn't the block editor or Pages list back to the page list\nadd_action( 'current_screen', function( $screen ) {\n    $allowed_bases = [ 'edit', 'post' ];\n    if ( ! in_array( $screen->base, $allowed_bases, true ) ) {\n        wp_safe_redirect( admin_url( 'edit.php?post_type=page' ) );\n        exit;\n    }\n} );\n"
+		},
+		{
+			"step": "installTheme",
+			"themeZipFile": {
+				"resource": "url",
+				"url": "https://your-site.com/your-theme.zip"
+			}
+		},
+		{
+			"step": "activateTheme",
+			"themeFolderName": "your-theme-folder-name"
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php require '/wordpress/wp-load.php'; update_user_meta( 1, 'gutenbergWelcomeGuide', false ); update_user_meta( 1, 'core_block_editor_is_new_user', false ); ?>"
 		}
-	  },
-	  {
-		"step": "activateTheme",
-		"themeFolderName": "your-theme-folder-name"
-	  },
-	  {
-		"step": "runPHP",
-		"code": "<?php require '/wordpress/wp-load.php'; update_user_meta( 1, 'gutenbergWelcomeGuide', false ); update_user_meta( 1, 'core_block_editor_is_new_user', false ); ?>"
-	  }
 	]
-  }
+}
