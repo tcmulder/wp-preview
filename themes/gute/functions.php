@@ -41,3 +41,14 @@ add_action( 'current_screen', function( $screen ) {
         exit;
     }
 } );
+
+// Hide the preview dropdown in the block editor
+add_action( 'enqueue_block_editor_assets', function() {
+    wp_add_inline_script( 'wp-edit-post', '
+        wp.domReady( function() {
+            var style = document.createElement( "style" );
+            style.textContent = ".editor-header__settings .editor-preview-dropdown, .edit-post-header__settings .editor-preview-dropdown { display: none !important; }";
+            document.head.appendChild( style );
+        } );
+    ' );
+} );
